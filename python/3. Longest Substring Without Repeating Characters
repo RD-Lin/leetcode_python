@@ -1,5 +1,5 @@
 
-#双指针，left指向不可行字符
+#滑动窗口，left指向不可行字符，重复时候跳过重复区间
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         res = 0
