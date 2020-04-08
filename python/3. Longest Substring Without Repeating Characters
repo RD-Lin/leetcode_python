@@ -1,0 +1,13 @@
+
+#双指针，left指向不可行字符
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        res = 0
+        left = -1
+        his = {}
+        for i, c in enumerate(s):
+            if (c in his) and his[c]>left:
+                left = his[c]
+            his[c] = i
+            res = max(res, i-left)    
+        return res
