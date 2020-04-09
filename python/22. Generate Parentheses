@@ -1,0 +1,36 @@
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        if n == 0: return [""]
+        if n == 1: return ["()"]
+        res = []
+        def backtrace(s, left, right):
+            # 右括号个数不得大于左括号
+            if left>n or right>n or right > left:
+                return
+            # 满足条件
+            if left==n and right==n:
+                res.append(s)
+            if left >= right:
+                # 尝试添加一个左括号
+                backtrace(s+'(', left+1, right)
+                # 尝试添加个右括号
+                backtrace(s+')', left, right+1)
+
+        backtrace("", 0, 0)
+        return res
+        
+        
+#参考官方题解
+class Solution:
+    #偷懒的方式，使用缓存装饰器，用字典存储(参数可散列要求)，参数为maxsize
+    #和自己用dict一个道理
+    @lru_cache(None)
+    def generateParenthesis(self, n: int) -> List[str]:
+        if n == 0: return ['']
+        ans = []
+        for c in range(n):
+            for left in self.generateParenthesis(c):
+                for right in self.generateParenthesis(n-1-c):
+                    # 巧妙地添加了一个括号，隐含终止条件
+                    ans.append('({}){}'.format(left, right))
+        return ans
