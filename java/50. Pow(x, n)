@@ -1,0 +1,48 @@
+//用递归解是比较容易想到的，为了避免重复计算，还需要一个map作为计算结果的缓存
+class Solution {
+    HashMap<Integer, Double> cache = new HashMap<>();
+    public double myPow(double x, int n) {
+        double left = 1;
+        if(n == -2147483648)
+        {
+            n += 1;
+            left = x==0? 1: 1/x;   
+        }
+        double ans = unsigedPow(x, Math.abs(n));
+        if(n<0) return 1/ans*left;
+        return ans*left;
+    }
+    private double unsigedPow(double x, int n)
+    {
+        if(n==0) return 1.0;
+        if(x==0.0) return 0;
+        if(n==1) return x;
+        double ans = 1;
+        if(cache.containsKey(n))
+        {
+            ans = cache.get(n);
+        }
+        else{
+            ans = myPow(x, n/2);
+            ans = ans*ans;
+            if(n%2==1) ans = ans*x;
+            cache.put(n, ans);
+        }
+        return ans;
+    }
+}
+//快速幂算法
+//上述二分的思路分解pow(x, n)=pow(x, n/2)*pow(x, n/2)
+//快速幂将其分解为pow(x, n)=pow(x*x, n/2)
+class Solution {
+    public double myPow(double x, int n) {
+        double res = 1.0;
+        for(int i = n; i != 0; i /= 2){
+            if(i % 2 != 0){
+                res *= x;
+            }
+            x *= x;
+        }
+        return  n < 0 ? 1 / res : res;
+    }
+}
