@@ -1,0 +1,35 @@
+
+
+//二叉搜索树中序遍历，最小差值一定是由相邻元素产生
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int getMinimumDifference(TreeNode root) {
+        int ans = Integer.MAX_VALUE;
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        int pre = -1;
+        while(root!=null || !stack.isEmpty())
+        {
+            while(root!=null)
+            {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            if(pre>=0)
+            {
+                ans = Math.min(ans, root.val-pre);
+            }
+            pre = root.val;
+            root = root.right;
+        }
+        return ans;
+    }
+}
