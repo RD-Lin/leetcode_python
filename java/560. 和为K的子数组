@@ -1,0 +1,40 @@
+//暴力解法，对任意位置i,遍历前i-1个位置
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        for(int start=0; start<nums.length;start++)
+        {
+            int sum = 0;
+            for(int end = start; end>=0; end--)
+            {
+                sum += nums[end];
+                if(sum == k)
+                    count ++;
+            }
+        }
+        return count;
+    }
+}
+//可能容易想到，对i位置保存sum([start, i]),start是任意小于i的值.这样i+1就可以从i中计算.有点动态规划的意思
+//下面这种方法更巧妙一点,将sum([0, i])的值保存,对当前位置j,如果存在x使得sum([0, j])-x=k那么这就是个解,
+//如果把sum([0, i])存在HashMap中就可以O(1)地查询x是否存在
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        //x=0,存在一个解
+        map.put(0, 1);
+        int sum = 0;
+        for(int val: nums)
+        {
+            sum += val;
+            
+            //如果存在，则在结果里加上对应的解个数
+            if(map.containsKey(sum-k))
+                count += map.get(sum-k);
+            //x=sum([0,i])对应的解加一
+            map.put(sum, map.getOrDefault(sum, 0)+1);
+        }
+        return count;
+    }
+}
